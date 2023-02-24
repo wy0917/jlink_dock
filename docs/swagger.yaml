@@ -1,0 +1,140 @@
+basePath: /api/v1
+definitions:
+  model.APIError:
+    properties:
+      createdAt:
+        type: string
+      errorCode:
+        type: integer
+      errorMessage:
+        type: string
+    type: object
+  model.Config:
+    properties:
+      acm:
+        description: Simulated ACM serial of the board
+        type: string
+      gdb:
+        properties:
+          exepath:
+            description: /path/to/arm-none-eabi-gdb
+            type: string
+          server:
+            type: string
+          serverPath:
+            description: /path/to/JLink_Linux_V766b_x86_64
+            type: string
+        type: object
+      logConfig:
+        properties:
+          labels:
+            additionalProperties:
+              type: string
+            type: object
+          server:
+            properties:
+              address:
+                type: string
+              password:
+                type: string
+              username:
+                type: string
+            type: object
+        type: object
+      serial:
+        description: Serial number of the board
+        type: string
+      server:
+        description: Server address
+        type: string
+      tty:
+        description: 'Optional: Debug tty port of the board'
+        type: string
+      type:
+        description: Board Type, for example STM32F412Zg
+        type: string
+    type: object
+host: localhost:80
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Display the information for current node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Config'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIError'
+      summary: Get information
+      tags:
+      - info
+  /log:
+    get:
+      consumes:
+      - application/json
+      description: Display the log for current node
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIError'
+      summary: Get running log
+      tags:
+      - log
+  /script:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Accept two files from formData, and cache them to the file system.
+        Then flashing the elf onto the board, then run the autorun.sh
+      parameters:
+      - description: elf file for flashing onto the board
+        in: formData
+        name: elf
+        required: true
+        type: file
+      - description: zipped script file with an autorun.sh in the root directory
+        in: formData
+        name: script
+        required: true
+        type: file
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIError'
+      summary: Flash elf to the board, and unzip the script.zip file and run script
+        according to autorun.sh
+      tags:
+      - script
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

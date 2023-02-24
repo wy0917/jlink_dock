@@ -1,0 +1,206 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server celler server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:80",
+    "basePath": "/api/v1",
+    "paths": {
+        "/info": {
+            "get": {
+                "description": "Display the information for current node",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "info"
+                ],
+                "summary": "Get information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Config"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/log": {
+            "get": {
+                "description": "Display the log for current node",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "log"
+                ],
+                "summary": "Get running log",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/script": {
+            "post": {
+                "description": "Accept two files from formData, and cache them to the file system. Then flashing the elf onto the board, then run the autorun.sh",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "script"
+                ],
+                "summary": "Flash elf to the board, and unzip the script.zip file and run script according to autorun.sh",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "elf file for flashing onto the board",
+                        "name": "elf",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "zipped script file with an autorun.sh in the root directory",
+                        "name": "script",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.APIError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.APIError": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "errorCode": {
+                    "type": "integer"
+                },
+                "errorMessage": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Config": {
+            "type": "object",
+            "properties": {
+                "acm": {
+                    "description": "Simulated ACM serial of the board",
+                    "type": "string"
+                },
+                "gdb": {
+                    "type": "object",
+                    "properties": {
+                        "exepath": {
+                            "description": "/path/to/arm-none-eabi-gdb",
+                            "type": "string"
+                        },
+                        "server": {
+                            "type": "string"
+                        },
+                        "serverPath": {
+                            "description": "/path/to/JLink_Linux_V766b_x86_64",
+                            "type": "string"
+                        }
+                    }
+                },
+                "logConfig": {
+                    "type": "object",
+                    "properties": {
+                        "labels": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        },
+                        "server": {
+                            "type": "object",
+                            "properties": {
+                                "address": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "serial": {
+                    "description": "Serial number of the board",
+                    "type": "string"
+                },
+                "server": {
+                    "description": "Server address",
+                    "type": "string"
+                },
+                "tty": {
+                    "description": "Optional: Debug tty port of the board",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Board Type, for example STM32F412Zg",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}

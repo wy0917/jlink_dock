@@ -1,0 +1,9 @@
+port=80
+type="stm32f412zg"
+serial=""
+tty="/dev/ttyUSB0"
+acm="/dev/ttyACM0"
+[gdb]
+server="127.0.0.1:2331"
+exe_path="/gcc-arm-none-eabi-gdb/bin/arm-none-eabi-gdb"
+server_path="/JLink_Linux_V766b_x86_64"
