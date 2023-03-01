@@ -160,31 +160,6 @@ const docTemplate = `{
                         }
                     }
                 },
-                "logConfig": {
-                    "type": "object",
-                    "properties": {
-                        "labels": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        },
-                        "server": {
-                            "type": "object",
-                            "properties": {
-                                "address": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
-                                },
-                                "username": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
                 "serial": {
                     "description": "Serial number of the board",
                     "type": "string"

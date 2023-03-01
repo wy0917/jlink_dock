@@ -25,22 +25,6 @@ definitions:
             description: /path/to/JLink_Linux_V766b_x86_64
             type: string
         type: object
-      logConfig:
-        properties:
-          labels:
-            additionalProperties:
-              type: string
-            type: object
-          server:
-            properties:
-              address:
-                type: string
-              password:
-                type: string
-              username:
-                type: string
-            type: object
-        type: object
       serial:
         description: Serial number of the board
         type: string
