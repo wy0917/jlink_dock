@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type RunFiles struct {
+type UploadedFiles struct {
 	elf    *multipart.FileHeader `form:"elf"`    // ELF file to flash onto the board
 	script *multipart.FileHeader `form:"script"` // Script.zip, which will be run
 }
